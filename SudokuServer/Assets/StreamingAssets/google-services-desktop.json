@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "477411094500",
+    "project_id": "sudokurush-c16dd",
+    "storage_bucket": "sudokurush-c16dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:477411094500:android:b880e1f3c5a27df71f21f1",
+        "android_client_info": {
+          "package_name": "com.iDGames.SudokuRush"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "477411094500-uqbmptam7nl9bk47cgqg2853q1aovlbi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXKHIwfl3aeL8KKbFJ2uargXyMIkHGzCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "477411094500-uqbmptam7nl9bk47cgqg2853q1aovlbi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "477411094500-src2ulrl1fc422qfsgebrapo1tvitd83.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.iDGames.SudokuRush"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

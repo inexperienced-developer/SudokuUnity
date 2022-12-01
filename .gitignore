@@ -83,3 +83,10 @@ SudokuClient/[Aa]ssets/[Ss]treamingAssets/aa.meta
 SudokuClient/[Aa]ssets/[Ss]treamingAssets/aa/*
 SudokuServer/[Aa]ssets/[Ss]treamingAssets/aa.meta
 SudokuServer/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Firebase
+*/[Aa]ssets/google-services.json*
+*/[Aa]ssets/GoogleService-Info.plist*
+*/[Aa]ssets/Firebase
+*/[Aa]ssets/ExternalDependencyManager
+*/[Aa]ssets/Plugins
