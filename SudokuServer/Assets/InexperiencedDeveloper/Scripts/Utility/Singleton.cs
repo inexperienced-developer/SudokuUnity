@@ -11,12 +11,12 @@ namespace InexperiencedDeveloper.Core
             {
                 if (instance == null)
                 {
-                    Utils.Log.DebugLogger.Log($"Looking for singleton of type {typeof(T)}");
+                    Debug.Log($"Looking for singleton of type {typeof(T)}");
                     instance = FindObjectOfType<T>();
 
                     if (instance == null)
                     {
-                        Utils.Log.DebugLogger.LogWarning($"Couldn't find singleton of {typeof(T)}. Creating...");
+                        Debug.LogWarning($"Couldn't find singleton of {typeof(T)}. Creating...");
                         GameObject obj = new GameObject();
                         obj.name = typeof(T).Name;
                         instance = obj.AddComponent<T>();
@@ -35,7 +35,7 @@ namespace InexperiencedDeveloper.Core
             }
             else
             {
-                Utils.Log.DebugLogger.LogWarning($"Duplicate singleton of {typeof(T)}. Destroying...");
+                Debug.LogWarning($"Duplicate singleton of {typeof(T)}. Destroying...");
                 Destroy(gameObject);
             }
         }

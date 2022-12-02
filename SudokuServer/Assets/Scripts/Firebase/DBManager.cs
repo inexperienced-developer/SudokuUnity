@@ -8,14 +8,30 @@ using System.Linq;
 
 public class DBManager : Singleton<DBManager>
 {
+    private Firebase.FirebaseApp m_App;
     private FirebaseFirestore m_DB;
-
     protected override void Awake()
     {
         base.Awake();
-        m_DB = FirebaseFirestore.DefaultInstance;
-    }
+        Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+            var dependencyStatus = task.Result;
+            if (dependencyStatus == Firebase.DependencyStatus.Available)
+            {
+                // Create and hold a reference to your FirebaseApp,
+                // where app is a Firebase.FirebaseApp property of your application class.
+                m_App = Firebase.FirebaseApp.DefaultInstance;
 
+                // Set a flag here to indicate whether Firebase is ready to use by your app.
+                m_DB = FirebaseFirestore.DefaultInstance;
+            }
+            else
+            {
+                UnityEngine.Debug.LogError(System.String.Format(
+                  "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
+                // Firebase Unity SDK is not safe to use here.
+            }
+        });
+    }
 
     // --------------- PUZZLE FORMAT --------------- //
     // -------- [[1,2,3],[4,5,6],[7,8,9], ---------- //
@@ -25,7 +41,7 @@ public class DBManager : Singleton<DBManager>
     // ---  List length 9 of Byte array length 3 --- //
     // --------------------------------------------- //
 
-    public async Task<List<byte[]>> GetPuzzle()
+    public async Task<List<int[]>> GetPuzzle()
     {
         List<byte[]> puzzle = new List<byte[]>();
         DocumentReference puzzleRef = m_DB.Collection("general").Document("puzzles");
@@ -49,15 +65,23 @@ public class DBManager : Singleton<DBManager>
         return null;
     }
 
-    public async Task SavePuzzles(List<List<byte[]>> puzzles)
+    public async Task SavePuzzles(List<string> puzzles)
     {
-        Dictionary<string, List<byte[]>> puzzDict = new Dictionary<string, List<byte[]>>();
-        foreach(var puzz in puzzles)
+        Debug.Log("Saving Puzzle");
+        try
         {
-            puzzDict.Add(RandomPuzzleKey(), puzz);
+            Dictionary<string, object> puzzDict = new Dictionary<string, object>();
+            foreach (var puzz in puzzles)
+            {
+                puzzDict.Add(RandomPuzzleKey(), puzz);
+            }
+            DocumentReference puzzleRef = m_DB.Collection("general").Document("puzzles");
+            await puzzleRef.SetAsync(puzzDict, SetOptions.MergeAll);
+        } catch (System.Exception e)
+        {
+            Debug.LogError($"Can't save puzzles (Exception: {e})");
         }
-        DocumentReference puzzleRef = m_DB.Collection("general").Document("puzzles");
-       await puzzleRef.SetAsync(puzzDict, SetOptions.MergeAll);
+
     }
 
     private string RandomPuzzleKey(int length = 20)
