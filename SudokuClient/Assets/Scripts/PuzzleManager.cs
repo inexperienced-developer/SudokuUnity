@@ -17,7 +17,6 @@ public class PuzzleManager : MonoBehaviour
         else Instance = this;
     }
 
-
     [Header("Puzzle generation variables")]
     public int width = 9, height = 9;
     public int iterations = 1000;
@@ -112,7 +111,36 @@ public class PuzzleManager : MonoBehaviour
         puzzles.Clear();
     }
 
-    public async Task StartGame()
+    //public async Task StartGame()
+    //{
+    //    //Could be a database or just text-website hosting sudoku puzzles
+    //    var puzzles = File.ReadAllLines(puzzlePath).ToList();
+    //    string puzzle = puzzles[Random.Range(0, puzzles.Count)];
+    //    for (int i = 0; i < puzzle.Length; i += 2)
+    //    {
+    //        int value = int.Parse(puzzle[i].ToString());
+    //        int sectionNum = int.Parse(puzzle[i + 1].ToString());
+    //        var button = Instantiate(tileButton, tileParents[sectionNum]);
+    //        var text = button.GetComponentInChildren<TMP_Text>(true);
+    //        var section = tileParents[sectionNum].GetComponent<SectionWin>();
+    //        text.SetText(value.ToString());
+    //        bool visible = percentOfTilesVisible > Random.Range(0f, 1f);
+    //        var t = button.GetComponent<Tile>();
+    //        t.value = value;
+    //        t.DefaultVisible(visible);
+    //        text.color = visible ? Color.black : textBlue;
+    //        GameManager.Instance.tiles.Add(t);
+    //        section.tilesInSection.Add(t);
+    //    }
+    //    print(Application.persistentDataPath);
+    //}
+
+    public void StartGame()
+    {
+        StartCoroutine(Game());
+    }
+
+    private IEnumerator Game()
     {
         //Could be a database or just text-website hosting sudoku puzzles
         var puzzles = File.ReadAllLines(puzzlePath).ToList();
@@ -132,6 +160,7 @@ public class PuzzleManager : MonoBehaviour
             text.color = visible ? Color.black : textBlue;
             GameManager.Instance.tiles.Add(t);
             section.tilesInSection.Add(t);
+            yield return new WaitForSeconds(1);
         }
         print(Application.persistentDataPath);
     }

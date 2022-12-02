@@ -41,28 +41,43 @@ public class DBManager : Singleton<DBManager>
     // ---  List length 9 of Byte array length 3 --- //
     // --------------------------------------------- //
 
-    public async Task<List<int[]>> GetPuzzle()
+    public async Task<int[]> GetPuzzle()
     {
-        List<byte[]> puzzle = new List<byte[]>();
-        DocumentReference puzzleRef = m_DB.Collection("general").Document("puzzles");
-        DocumentSnapshot puzzleSnap = await puzzleRef.GetSnapshotAsync();
-        if(puzzleSnap != null)
+        try
         {
-            Dictionary<string, object> puzzleDict = puzzleSnap.ToDictionary();
-            if(puzzleDict != null)
+            List<int> puzzle = new List<int>();
+            DocumentReference puzzleRef = m_DB.Collection("general").Document("puzzles");
+            DocumentSnapshot puzzleSnap = await puzzleRef.GetSnapshotAsync();
+            if (puzzleSnap != null)
             {
-                var keys = puzzleDict.Keys.ToArray();
-                if(puzzleDict.TryGetValue(keys[Random.Range(0, keys.Length)], out var randomPuzzle))
+                Dictionary<string, object> puzzleDict = puzzleSnap.ToDictionary();
+                if (puzzleDict != null)
                 {
-                    
-                }
-                else
-                {
-                    Debug.LogError("Unable to find a random puzzle");
+                    var keys = puzzleDict.Keys.ToArray();
+                    if (puzzleDict.TryGetValue(keys[Random.Range(0, keys.Length)], out var randomPuzzle))
+                    {
+                        string puzzleString = randomPuzzle.ToString();
+
+                        // Builds in this order
+                        // Row 7, 8, 9, 4, 5, 6, 1, 2, 3
+                        for (int i = 0; i < puzzleString.Length; i += 2)
+                        {
+                            puzzle.Add(int.Parse(puzzleString[i].ToString()));
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("Unable to find a random puzzle");
+                    }
                 }
             }
+            return puzzle.ToArray();
+        } catch (System.Exception e)
+        {
+            Debug.LogError($"Failure to find a puzzle in DB (Exception {e})");
+            throw new System.Exception();
         }
-        return null;
+
     }
 
     public async Task SavePuzzles(List<string> puzzles)

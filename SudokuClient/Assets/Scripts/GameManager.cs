@@ -1,18 +1,12 @@
+using InexperiencedDeveloper.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public static GameManager Instance;
-    private void Awake()
-    {
-        if (GameManager.Instance != null) Destroy(this);
-        else Instance = this;
-    }
-
     [Header("Raycasting")]
     private Tile selectedTile;
     private PointerEventData pointerEventData;

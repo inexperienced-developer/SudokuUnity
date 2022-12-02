@@ -92,6 +92,35 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
+    [ContextMenu("Get puzzle from DB")]
+    public async Task<int[]> GetPuzzle()
+    {
+        try
+        {
+            int[] puzzle = await DBManager.Instance.GetPuzzle();
+            if(puzzle != null)
+            {
+                string puzz = "";
+                foreach (var p in puzzle)
+                {
+                    puzz += $"{p} ";
+                }
+            }
+            else
+            {
+                throw new System.Exception();
+            }
+            return puzzle;
+
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Can't get puzzle from DB (Exception {e})");
+            throw new System.Exception();
+        }
+
+    }
+
     private void Write(List<string> contents)
     {
         StreamWriter file = new StreamWriter(puzzlePath);

@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
         if (ClearTiles)
         {
             GameManager.Instance.ClearTiles();
-            await PuzzleManager.Instance.StartGame();
+            PuzzleManager.Instance.StartGame();
         }
         screens.CurrentScreen = CurrentScreen.GameScreen;
     }
