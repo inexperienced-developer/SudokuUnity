@@ -1,7 +1,20 @@
 using InexperiencedDeveloper.Core;
 using Riptide;
 using Riptide.Utils;
+using System;
 using UnityEngine;
+
+public enum ServerToClientId : ushort
+{
+    SyncTicks = 1,
+    AccountData, //Contains Currencies, Username, Profile Info
+}
+
+public enum ClientToServerId : ushort
+{
+    AccountInformation = 1, //Contains email/username -> Waits for AccountData
+    RequestToJoinLobby, //Contains friend's username
+}
 
 public class NetworkManager : Singleton<NetworkManager>
 {
@@ -16,6 +29,12 @@ public class NetworkManager : Singleton<NetworkManager>
 
         Server = new Server();
         Server.Start(port, maxClientCount);
+        Server.ClientDisconnected += OnClientDisconnect;
+    }
+
+    private void OnClientDisconnect(object sender, ServerDisconnectedEventArgs e)
+    {
+        Destroy(PlayerManager.GetPlayerById(e.Client.Id).gameObject);
     }
 
     private void FixedUpdate()

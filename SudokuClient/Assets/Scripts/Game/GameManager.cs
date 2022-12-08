@@ -7,6 +7,10 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
+    [Header("Player")]
+    [SerializeField] private GameObject m_PlayerPrefab;
+    public GameObject PlayerPrefab => m_PlayerPrefab;
+
     [Header("Raycasting")]
     private Tile selectedTile;
     private PointerEventData pointerEventData;

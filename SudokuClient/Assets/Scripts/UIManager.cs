@@ -15,7 +15,12 @@ public class UIManager : MonoBehaviour
 
     public bool ClearTiles = true;
 
-    public async void StartGame()
+    public void SignIn()
+    {
+        NetworkManager.Instance.Connect();
+    }
+
+    public void StartGame()
     {
         if (ClearTiles)
         {
@@ -29,5 +34,4 @@ public class UIManager : MonoBehaviour
     {
         screens.CurrentScreen = CurrentScreen.MainMenu;
     }
-
 }

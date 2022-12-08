@@ -4,6 +4,18 @@ using Riptide.Utils;
 using System;
 using UnityEngine;
 
+public enum ServerToClientId : ushort
+{
+    SyncTicks = 1,
+    AccountData, //Contains Currencies, Username, Profile Info
+}
+
+public enum ClientToServerId : ushort
+{
+    AccountInformation = 1, //Contains email/username -> Waits for AccountData
+    RequestToJoinLobby, //Contains friend's username
+}
+
 public class NetworkManager : Singleton<NetworkManager>
 {
     public Client Client { get; private set; }
@@ -18,17 +30,21 @@ public class NetworkManager : Singleton<NetworkManager>
         Client.Connected += OnClientConnected;
     }
 
-    private void OnClientConnected(object sender, EventArgs e)
+    private void OnDisable()
     {
-        Debug.Log(Client.Id);
+        Client.Connected -= OnClientConnected;
     }
 
-    private void Update()
+    private void OnClientConnected(object sender, EventArgs e)
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Client.Connect($"{ip}:{port}");
-        }
+        //TODO: Get Email from Authentication
+        string email = "a@a.com"; //TEMP EMAIL
+        LevelManager.Instance.LoadSceneAsync(Constants.MAIN_MENU_SCREEN, delegate { PlayerManager.Instance.CreatePlayer(NetworkManager.Instance.Client.Id, email);});
+    }
+
+    public void Connect()
+    {
+        Client.Connect($"{ip}:{port}");
     }
 
     private void FixedUpdate()
