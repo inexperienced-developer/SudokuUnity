@@ -1,6 +1,8 @@
+using InexperiencedDeveloper.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum CurrentScreen
 {
@@ -9,9 +11,10 @@ public enum CurrentScreen
     GameScreen
 }
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
     [SerializeField] private UIScreens screens;
+    public GraphicRaycaster Raycaster { get; private set; }
 
     public bool ClearTiles = true;
 
@@ -33,5 +36,10 @@ public class UIManager : MonoBehaviour
     public void GoBack()
     {
         screens.CurrentScreen = CurrentScreen.MainMenu;
+    }
+
+    public void SetRaycaster(GraphicRaycaster raycaster)
+    {
+        Raycaster = raycaster;
     }
 }

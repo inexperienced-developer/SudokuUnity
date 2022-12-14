@@ -35,7 +35,14 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private static void FindLobby(ushort id)
     {
-
+        Lobby openLobby = LobbyManager.GetNextAvailableOpenLobby();
+        Player player = GetPlayerById(id);
+        if (player == null)
+        {
+            IDLogger.LogError($"Can't find player {id}");
+            return;
+        }
+        openLobby.JoinLobby(player);
     }
 
     private static void FindLobby(ushort id, string friendName)

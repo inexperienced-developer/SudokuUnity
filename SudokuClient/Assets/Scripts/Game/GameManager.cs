@@ -1,4 +1,5 @@
 using InexperiencedDeveloper.Core;
+using InexperiencedDeveloper.Utils.Log;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,11 @@ public class GameManager : Singleton<GameManager>
 
     private void Update()
     {
+        if(UIManager.Instance.Raycaster == null)
+        {
+            IDLogger.LogError($"UIManager.Instance.Raycaster is null");
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             //Set up the new Pointer Event
@@ -40,7 +46,7 @@ public class GameManager : Singleton<GameManager>
             List<RaycastResult> results = new List<RaycastResult>();
 
             //Raycast using the Graphics Raycaster and mouse click position
-            raycaster.Raycast(pointerEventData, results);
+            UIManager.Instance.Raycaster?.Raycast(pointerEventData, results);
 
             if (results.Count > 0)
             {

@@ -13,13 +13,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void CreatePlayer(ushort id, string email)
     {
-        //Create Player Obj
-        Player player = Instantiate(GameManager.Instance.PlayerPrefab, Vector3.zero, Quaternion.identity).GetComponent<Player>();
-        player.gameObject.name = $"Player {id} (Waiting for server)";
-        //Add to list
-        m_Players.Add(id, player);
-        IDLogger.Log($"Player Added: {id}");
-        IDLogger.Log($"Count: {m_Players.Count}");
+        Player player = SpawnPlayer(id);
         player.SendAccountInfo(email);
     }
 
@@ -36,6 +30,56 @@ public class PlayerManager : Singleton<PlayerManager>
         player.gameObject.name = $"{username}({id})";
     }
 
+    private static void JoinLobby(ushort lobbyId, ushort[] playerIds)
+    {
+        List<Player> playerList = new List<Player>();
+        playerList.Add(GetLocalPlayer());
+        foreach (ushort id in playerIds)
+        {
+            Player newPlayer = GetPlayerById(id);
+            if (newPlayer != null && newPlayer != GetLocalPlayer())
+            {
+                IDLogger.Log($"Player {id} already exists.");
+                continue;
+            }
+            newPlayer = SpawnPlayer(id);
+            playerList.Add(newPlayer);
+        }
+        if (playerList.Count > LobbyManager.MAX_PLAYERS)
+        {
+            IDLogger.LogError($"More than {LobbyManager.MAX_PLAYERS} cannot join a lobby at a time.");
+            return;
+        }
+        if (!LobbyManager.GetLobbyById(lobbyId, out Lobby lobby))
+        {
+            Lobby newLobby = LobbyManager.Instance.CreateNewLobby(lobbyId);
+            foreach(var player in playerList)
+            {
+                newLobby.JoinLobby(player);
+            }
+        }
+        else
+        {
+            foreach(var player in playerList)
+            {
+                if (lobby.PlayersInLobby.Contains(player.Id))
+                    continue;
+                lobby.JoinLobby(player);
+            }
+        }
+    }
+
+    private static Player SpawnPlayer(ushort id)
+    {
+        if (GetPlayerById(id) != null) return GetPlayerById(id);
+        Player newPlayer = Instantiate(GameManager.Instance.PlayerPrefab, Vector3.zero, Quaternion.identity).GetComponent<Player>();
+        newPlayer.gameObject.name = $"Player {newPlayer.Id}";
+        newPlayer.Init(id);
+        m_Players.Add(newPlayer.Id, newPlayer);
+        return newPlayer;
+    }
+
+
     #region Messages
 
 
@@ -50,6 +94,15 @@ public class PlayerManager : Singleton<PlayerManager>
         string username = msg.GetString();
         byte level = msg.GetByte();
         ApplyAccountData(id, username, level);
+    }
+
+    [MessageHandler((ushort)ServerToClientId.JoinedLobby)]
+    private static void ReceiveJoinLobby(Message msg)
+    {
+        ushort lobbyId = msg.GetUShort();
+        byte len = msg.GetByte();
+        ushort[] playerIds = msg.GetUShorts(len);
+        JoinLobby(lobbyId, playerIds);
     }
 
     #endregion

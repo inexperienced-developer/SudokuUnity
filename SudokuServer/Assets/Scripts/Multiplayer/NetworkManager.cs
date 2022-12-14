@@ -8,6 +8,7 @@ public enum ServerToClientId : ushort
 {
     SyncTicks = 1,
     AccountData, //Contains Currencies, Username, Profile Info
+    JoinedLobby,
 }
 
 public enum ClientToServerId : ushort
