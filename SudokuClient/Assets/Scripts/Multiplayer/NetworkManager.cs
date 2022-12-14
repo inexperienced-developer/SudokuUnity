@@ -13,7 +13,7 @@ public enum ServerToClientId : ushort
 public enum ClientToServerId : ushort
 {
     AccountInformation = 1, //Contains email/username -> Waits for AccountData
-    RequestToJoinLobby, //Contains friend's username
+    RequestToJoinRandomLobby, //RandomLobby
 }
 
 public class NetworkManager : Singleton<NetworkManager>

@@ -30,5 +30,11 @@ public class Player : MonoBehaviour
         NetworkManager.Instance.Client.Send(msg);
     }
 
+    public void RequestToJoinRandomLobby()
+    {
+        Message msg = Message.Create(MessageSendMode.Reliable, ClientToServerId.RequestToJoinRandomLobby);
+        NetworkManager.Instance.Client.Send(msg);
+    }
+
     #endregion
 }

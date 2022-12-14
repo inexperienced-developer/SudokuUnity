@@ -33,6 +33,16 @@ public class PlayerManager : Singleton<PlayerManager>
         player.SendAccountData(player.Id);  //Send the data back -- for now it's just a username (Future would be all achievements, level, see who's online, etc.)
     }
 
+    private static void FindLobby(ushort id)
+    {
+
+    }
+
+    private static void FindLobby(ushort id, string friendName)
+    {
+
+    }
+
     #region Messages
 
 
@@ -45,6 +55,12 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         string email = msg.GetString();
         CreatePlayer(fromId, email);
+    }
+
+    [MessageHandler((ushort)ClientToServerId.RequestToJoinRandomLobby)]
+    private static void ReceiveRequestToJoinRandomLobby(ushort fromId, Message msg)
+    {
+        FindLobby(fromId);
     }
 
     #endregion
