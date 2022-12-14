@@ -9,7 +9,7 @@ public class LocalSceneUI : MonoBehaviour
     [SerializeField] private GraphicRaycaster m_Raycaster;
     [SerializeField] private ButtonContainer[] m_SceneButtons;
 
-    private void Awake()
+    private void Start()
     {
         UIManager.Instance.SetRaycaster(m_Raycaster);
         foreach(var button in m_SceneButtons)

@@ -48,6 +48,5 @@ public class Lobby : MonoBehaviour
 
     private void OnDestroy()
     {
-        LobbyManager.RemoveLobbyFromList(this);
     }
 }

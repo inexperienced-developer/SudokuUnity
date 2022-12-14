@@ -26,7 +26,7 @@ public class PuzzleManager : MonoBehaviour
     public Dictionary<int, List<GameTile>> tileRows = new Dictionary<int, List<GameTile>>();
     private List<int> sortedRows = new List<int>();
     private List<int> sortedCols = new List<int>();
-    private string puzzlePath = "B:/ZB-Projects/UnitySudoku/puzzles.txt";
+    private string puzzlePath = $"{Application.persistentDataPath}/puzzles.txt";
     public List<string> puzzles;
 
     private readonly Section[] sections = new Section[9] { Section.I, Section.II, Section.III, Section.IV, Section.V, Section.VI, Section.VII, Section.VIII, Section.IX };
@@ -135,6 +135,7 @@ public class PuzzleManager : MonoBehaviour
     //    print(Application.persistentDataPath);
     //}
 
+    [ContextMenu("Start Game")]
     public void StartGame()
     {
         StartCoroutine(Game());

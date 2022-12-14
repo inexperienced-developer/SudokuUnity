@@ -22,10 +22,6 @@ public class LobbyManager : Singleton<LobbyManager>
         return false;
     }
 
-    public static void RemoveLobbyFromList(Lobby lobby)
-    {
-        m_CurrentLobbies.Remove(lobby.LobbyId);
-    }
 
     public Lobby CreateNewLobby(ushort lobbyId)
     {
